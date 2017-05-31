@@ -3,7 +3,7 @@
 
   <groupId>hsenid</groupId>
   <artifactId>FileCopy</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>V1.0</version>
   <packaging>jar</packaging>
 
   <name>FileCopy</name>
@@ -14,7 +14,7 @@
     <connection>scm:git:git@git.com:difnajayashani/File-Copy.git</connection>
     <url>scm:git:git@git.com:difnajayashani/File-Copy</url>
     <developerConnection>scm:git:git@git.com:difnajayashani/File-Copy.git</developerConnection>
-    <tag>V1.0</tag>
+    <tag>1.0.0</tag>
   </scm>
 
   <properties>
