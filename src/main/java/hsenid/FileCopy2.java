@@ -27,6 +27,13 @@ public class FileCopy2 extends JFrame {
     private JLabel lbl_copy_move;
 
     public FileCopy2() {
+
+        JFrame frame =new JFrame("FileCopy2");
+        frame.setSize(450, 200);
+        frame.setResizable(true);
+        frame.add(file_copy_form);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setVisible(true);
         combo_copy_select.addItem("Copy");
         combo_copy_select.addItem("Move");
 
@@ -91,15 +98,11 @@ public class FileCopy2 extends JFrame {
     }
 
     public static void main(String[] args) {
-        JFrame frame =new JFrame("FileCopy2");
-        frame.setSize(450, 200);
-        frame.setResizable(true);
-        frame.setContentPane(new FileCopy2().file_copy_form);
-      /* FileCopy2 fileCopy=new FileCopy2();
-       fileCopy.setSize(400,150);*/
-       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-       frame.pack();
-       frame.setVisible(true);
+
+      //  frame.setContentPane(new FileCopy2().file_copy_form);
+       FileCopy2 fileCopy=new FileCopy2();
+       fileCopy.setSize(400,150);
+
     }
 
 }
