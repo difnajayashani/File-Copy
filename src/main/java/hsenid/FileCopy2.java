@@ -28,6 +28,7 @@ public class FileCopy2 extends JFrame {
     private JComboBox combo_copy_select;
     private JLabel lbl_copy_move;
     private JProgressBar copyProgress;
+
     private String copyOrMove;
 
     public FileCopy2() {
@@ -40,13 +41,14 @@ public class FileCopy2 extends JFrame {
         frame.setVisible(true);
         combo_copy_select.addItem("Copy");
         combo_copy_select.addItem("Move");
+
         copyProgress.setVisible(false);
 
 
 
         Thread copyThred= new Thread(() -> {
             copyOrMove=combo_copy_select.getSelectedItem().toString();
-            fileService.startCoping(file_source_path.getText(),file_destination_path.getText(),copyOrMove);
+            fileService.startCoping(file_source_path.getText(),file_destination_path.getText(),copyOrMove,copyProgress);
         });
 
         btn_start.addActionListener(e ->{

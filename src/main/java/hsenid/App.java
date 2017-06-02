@@ -1,7 +1,7 @@
 package hsenid;
 
 /**
- *
+ * The Main method Class
  *
  */
 public class App 
