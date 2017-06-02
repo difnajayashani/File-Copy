@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.net.SocketPermission;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -13,6 +14,7 @@ import java.nio.file.Path;
  * Created by hsenid on 5/23/17.
  */
 public class FileCopy2 extends JFrame {
+    FileService fileService= new FileService();
     private JPanel file_copy_form;
     private JTextField file_source_path;
     private JTextField file_destination_path;
@@ -25,6 +27,8 @@ public class FileCopy2 extends JFrame {
     private JButton btn_choose_dst;
     private JComboBox combo_copy_select;
     private JLabel lbl_copy_move;
+    private JProgressBar copyProgress;
+    private String copyOrMove;
 
     public FileCopy2() {
 
@@ -36,12 +40,35 @@ public class FileCopy2 extends JFrame {
         frame.setVisible(true);
         combo_copy_select.addItem("Copy");
         combo_copy_select.addItem("Move");
+        copyProgress.setVisible(false);
+
+
+
+        Thread copyThred= new Thread(() -> {
+            copyOrMove=combo_copy_select.getSelectedItem().toString();
+            fileService.startCoping(file_source_path.getText(),file_destination_path.getText(),copyOrMove);
+        });
+
+        btn_start.addActionListener(e ->{
+            if (file_source_path.getText().equals("") || file_destination_path.getText().equals("")) {
+                JOptionPane.showMessageDialog(null, "Both the paths are not selected");
+
+            }else {
+                copyThred.start();
+            }
+        }
+        );
+
+        btn_pause.addActionListener(e ->{}
+
+        );
+        btn_stop.addActionListener(e ->
+            copyThred.interrupt()
+        );
 
 
         //get the selected source file path
-        btn_choose_src.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        btn_choose_src.addActionListener(e ->  {
                 try {
                     JFileChooser fileChoser = new JFileChooser();
                     fileChoser.setDialogTitle("Select a File");
@@ -49,17 +76,17 @@ public class FileCopy2 extends JFrame {
                     String selectedFilePath = fileChoser.getSelectedFile().getAbsolutePath();
                     file_source_path.setText(selectedFilePath);
                 }catch (NullPointerException e1){
+                    System.out.print("NUll Pointer Exception in source file selection: "+e1);
+
                     JOptionPane.showMessageDialog(null, "No file selected");
                 }
 
-            }
+
         });
 
 
         //get the selected destination file path
-        btn_choose_dst.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        btn_choose_dst.addActionListener(e ->  {
                 try {
                     JFileChooser fileChoser = new JFileChooser();
                     fileChoser.setDialogTitle("Copy to");
@@ -70,38 +97,14 @@ public class FileCopy2 extends JFrame {
                     file_destination_path.setText(selectedFilePath);
 
                 }catch (NullPointerException e1){
+                    System.out.print("NUll Pointer Exception in destination selection: "+e1);
+
                     JOptionPane.showMessageDialog(null, "Select a destination location\n" +
                             "& enter a file name(example.xxx)");
 
                 }
-            }
+
         });
-
-
-        btn_start.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                File sourceFile=new File(file_source_path.getText());
-                File destinationFile=new File(file_destination_path.getText());
-                Path sourcePath=sourceFile.toPath();
-                Path destinationPath=destinationFile.toPath();
-
-                try {
-                    Files.copy(sourcePath,destinationPath);
-                } catch (IOException e1) {
-                    System.out.print("Exception in copying the file"+e1);
-                }
-
-            }
-        });
-
-    }
-
-    public static void main(String[] args) {
-
-      //  frame.setContentPane(new FileCopy2().file_copy_form);
-       FileCopy2 fileCopy=new FileCopy2();
-       fileCopy.setSize(400,150);
 
     }
 
