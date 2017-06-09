@@ -13,7 +13,7 @@ import java.nio.file.Path;
 /**
  * Created by hsenid on 5/23/17.
  */
-public class FileCopy2  {
+public class FileCopy2 extends Frame  {
     FileService fileService= new FileService();
     private JPanel file_copy_form;
     private JTextField file_source_path;
@@ -30,26 +30,33 @@ public class FileCopy2  {
     private JProgressBar copyProgress;
 
     private String copyOrMove;
-
-    Thread copyThred= new Thread(() -> {
-        copyOrMove=combo_copy_select.getSelectedItem().toString();
-        fileService.startCoping(file_source_path.getText(),file_destination_path.getText(),copyOrMove,copyProgress);
-    });
+    private Long startTime;
+    private Long endTime;
 
 
-    public void copyMoveStart() {
+
+
+    public FileCopy2() {
 
         JFrame frame =new JFrame("FileCopy2");
         frame.setSize(450, 200);
         frame.setResizable(true);
-        frame.setContentPane(new FileCopy2().file_copy_form);
-        //frame.add(file_copy_form);
+       // frame.setContentPane(new FileCopy2().file_copy_form);
+        frame.add(file_copy_form);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setVisible(true);
         combo_copy_select.addItem("Copy");
         combo_copy_select.addItem("Move");
 
         copyProgress.setVisible(false);
+
+        Thread copyThred= new Thread(() -> {
+            copyOrMove=combo_copy_select.getSelectedItem().toString();
+            startTime = System.currentTimeMillis();
+            fileService.startCoping(file_source_path.getText(),file_destination_path.getText(),copyOrMove,copyProgress);
+            endTime = System.currentTimeMillis();
+            JOptionPane.showMessageDialog(null, copyOrMove + " Completed.\n" + (endTime - startTime) + "ms");
+        });
 
         btn_start.addActionListener(e ->{
             if (file_source_path.getText().equals("") || file_destination_path.getText().equals("")) {
@@ -62,8 +69,19 @@ public class FileCopy2  {
         );
 
         btn_pause.addActionListener(e ->{
-            copyThred.suspend();
-            btn_pause.setText("Resume");
+            Thread.State state = copyThred.getState();
+            if (state == Thread.State.RUNNABLE) {
+                try {
+                    copyThred.wait();
+                    btn_pause.setText("Resume");
+
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+            } else if (state == Thread.State.WAITING){
+                copyThred.notify();
+                btn_pause.setText("Pause");
+            }
         });
 
         btn_stop.addActionListener(e ->
