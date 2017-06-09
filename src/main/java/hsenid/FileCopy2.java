@@ -13,7 +13,7 @@ import java.nio.file.Path;
 /**
  * Created by hsenid on 5/23/17.
  */
-public class FileCopy2 extends JFrame {
+public class FileCopy2  {
     FileService fileService= new FileService();
     private JPanel file_copy_form;
     private JTextField file_source_path;
@@ -31,25 +31,25 @@ public class FileCopy2 extends JFrame {
 
     private String copyOrMove;
 
-    public FileCopy2() {
+    Thread copyThred= new Thread(() -> {
+        copyOrMove=combo_copy_select.getSelectedItem().toString();
+        fileService.startCoping(file_source_path.getText(),file_destination_path.getText(),copyOrMove,copyProgress);
+    });
+
+
+    public void copyMoveStart() {
 
         JFrame frame =new JFrame("FileCopy2");
         frame.setSize(450, 200);
         frame.setResizable(true);
-        frame.add(file_copy_form);
+        frame.setContentPane(new FileCopy2().file_copy_form);
+        //frame.add(file_copy_form);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setVisible(true);
         combo_copy_select.addItem("Copy");
         combo_copy_select.addItem("Move");
 
         copyProgress.setVisible(false);
-
-
-
-        Thread copyThred= new Thread(() -> {
-            copyOrMove=combo_copy_select.getSelectedItem().toString();
-            fileService.startCoping(file_source_path.getText(),file_destination_path.getText(),copyOrMove,copyProgress);
-        });
 
         btn_start.addActionListener(e ->{
             if (file_source_path.getText().equals("") || file_destination_path.getText().equals("")) {
@@ -61,13 +61,14 @@ public class FileCopy2 extends JFrame {
         }
         );
 
-        btn_pause.addActionListener(e ->{}
+        btn_pause.addActionListener(e ->{
+            copyThred.suspend();
+            btn_pause.setText("Resume");
+        });
 
-        );
         btn_stop.addActionListener(e ->
             copyThred.interrupt()
         );
-
 
         //get the selected source file path
         btn_choose_src.addActionListener(e ->  {
@@ -82,8 +83,6 @@ public class FileCopy2 extends JFrame {
 
                     JOptionPane.showMessageDialog(null, "No file selected");
                 }
-
-
         });
 
 

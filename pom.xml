@@ -3,23 +3,22 @@
 
   <groupId>hsenid</groupId>
   <artifactId>FileCopy</artifactId>
-  <version>V1.0</version>
+  <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>FileCopy</name>
   <url>http://maven.apache.org</url>
 
-  <scm>
-    <!--<developerConnection>scm:svn:file://home/hsenid/Documents/MAVEN/fileReading/trunk/</developerConnection>-->
-    <connection>scm:git:git@git.com:difnajayashani/File-Copy.git</connection>
-    <url>scm:git:git@git.com:difnajayashani/File-Copy</url>
-    <developerConnection>scm:git:git@git.com:difnajayashani/File-Copy.git</developerConnection>
-    <tag>1.0.0</tag>
-  </scm>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+    <properties>
+        <project.scm.id>gitHub</project.scm.id>
+    </properties>
+
+  <scm>
+      <url>scm:git:https://github.com/difnajayashani/File-Copy.git</url>
+      <developerConnection>scm:git:https://github.com/difnajayashani/File-Copy.git</developerConnection>
+      <tag>HEAD</tag>
+  </scm>
 
   <dependencies>
     <dependency>
@@ -30,40 +29,38 @@
     </dependency>
 
     <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
-      <version>2.5</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.activemq</groupId>
-      <artifactId>activemq-core</artifactId>
-      <version>5.3.0</version>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-release-plugin</artifactId>
+      <version>2.5.3</version>
     </dependency>
 
-    <dependency>
-      <groupId>com.intellij</groupId>
-      <artifactId>forms_rt</artifactId>
-      <version>5.0</version>
-    </dependency>
   </dependencies>
 
   <build>
-    <plugins>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-release-plugin</artifactId>
-        <version>2.5.3</version>
-      </plugin>
-    </plugins>
+      <pluginManagement>
+          <plugins>
+              <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-release-plugin</artifactId>
+                  <version>2.5.3</version>
+                  <configuration>
+                      <!--<tagNameFormat>v@{project.version}</tagNameFormat>-->
+                      <checkModificationExcludes>
+                          <checkModificationExclude>pom.xml</checkModificationExclude>
+                      </checkModificationExcludes>
+                  </configuration>
+              </plugin>
+          </plugins>
+      </pluginManagement>
+      <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+                <source>1.8</source>
+                <target>1.8</target>
+            </configuration>
+        </plugin>
+      </plugins>
   </build>
 </project>
