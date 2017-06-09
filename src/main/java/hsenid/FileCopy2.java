@@ -34,8 +34,6 @@ public class FileCopy2 extends Frame  {
     private Long endTime;
 
 
-
-
     public FileCopy2() {
 
         JFrame frame =new JFrame("FileCopy2");
